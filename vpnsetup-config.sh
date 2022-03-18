@@ -27,6 +27,17 @@
 YOUR_IPSEC_PSK=''
 YOUR_USERNAME=''
 YOUR_PASSWORD=''
+VPN_PUBLIC_IP= 
+VPN_L2TP_NET=
+VPN_L2TP_LOCAL=
+VPN_L2TP_POOL=
+VPN_XAUTH_NET=
+VPN_XAUTH_POOL=
+VPN_DNS_SRV1=
+VPN_DNS_SRV2=
+VPN_DNS_NAME=
+VPN_CLIENT_NAME=
+VPN_PROTECT_CONFIG=
 
 # Important notes:   https://git.io/vpnnotes
 # Setup VPN clients: https://git.io/vpnclients
