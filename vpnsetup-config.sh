@@ -24,17 +24,13 @@
 # - All values MUST be placed inside 'single quotes'
 # - DO NOT use these special characters within values: \ " '
 
-YOUR_IPSEC_PSK=''
-YOUR_USERNAME=''
-YOUR_PASSWORD=''
-VPN_PUBLIC_IP=''
-VPN_L2TP_NET=''
-VPN_L2TP_LOCAL=''
-VPN_L2TP_POOL=''
-VPN_XAUTH_NET=''
-VPN_XAUTH_POOL=''
-VPN_CLIENT_NAME=''
-VPN_PROTECT_CONFIG=''
+YOUR_IPSEC_PSK='VRT'                             #IPSEC key
+YOUR_USERNAME='vpn01'                            #username
+YOUR_PASSWORD='vpn01!'                           #password
+VPN_PUBLIC_IP='167.179.52.1'                                 #WAN IP
+VPN_L2TP_NET='172.29.231.0/24'                   #VPN network
+VPN_L2TP_LOCAL='172.29.231.1'                    #VPN gateway
+VPN_L2TP_POOL='172.29.231.10-172.29.231.128'     #VPN POOL
 
 # Important notes:   https://git.io/vpnnotes
 # Setup VPN clients: https://git.io/vpnclients
