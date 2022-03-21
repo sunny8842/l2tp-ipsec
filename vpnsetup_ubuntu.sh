@@ -336,8 +336,6 @@ create_vpn_config() {
   L2TP_NET=${VPN_L2TP_NET:-'192.168.42.0/24'}
   L2TP_LOCAL=${VPN_L2TP_LOCAL:-'192.168.42.1'}
   L2TP_POOL=${VPN_L2TP_POOL:-'192.168.42.10-192.168.42.250'}
-  XAUTH_NET=${VPN_XAUTH_NET:-'192.168.43.0/24'}
-  XAUTH_POOL=${VPN_XAUTH_POOL:-'192.168.43.10-192.168.43.250'}
   DNS_SRV1=${VPN_DNS_SRV1:-'8.8.8.8'}
   DNS_SRV2=${VPN_DNS_SRV2:-'8.8.4.4'}
   DNS_SRVS="\"$DNS_SRV1 $DNS_SRV2\""
@@ -349,7 +347,7 @@ cat > /etc/ipsec.conf <<EOF
 version 2.0
 
 config setup
-  virtual-private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!$L2TP_NET,%v4:!$XAUTH_NET
+  virtual-private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!$L2TP_NET
   uniqueids=no
 
 conn shared
@@ -378,18 +376,6 @@ conn l2tp-psk
   type=transport
   also=shared
 
-conn xauth-psk
-  auto=add
-  leftsubnet=0.0.0.0/0
-  rightaddresspool=$XAUTH_POOL
-  modecfgdns=$DNS_SRVS
-  leftxauthserver=yes
-  rightxauthclient=yes
-  leftmodecfgserver=yes
-  rightmodecfgclient=yes
-  modecfgpull=yes
-  cisco-unity=yes
-  also=shared
 
 include /etc/ipsec.d/*.conf
 EOF
@@ -513,11 +499,7 @@ update_iptables() {
     $ipf 2 -i "$NET_IFACE" -o ppp+ -m conntrack --ctstate "$res" -j ACCEPT
     $ipf 3 -i ppp+ -o "$NET_IFACE" -j ACCEPT
     $ipf 4 -i ppp+ -o ppp+ -j ACCEPT
-    $ipf 5 -i "$NET_IFACE" -d "$XAUTH_NET" -m conntrack --ctstate "$res" -j ACCEPT
-    $ipf 6 -s "$XAUTH_NET" -o "$NET_IFACE" -j ACCEPT
-    $ipf 7 -s "$XAUTH_NET" -o ppp+ -j ACCEPT
     iptables -A FORWARD -j DROP
-    $ipp -s "$XAUTH_NET" -o "$NET_IFACE" -m policy --dir out --pol none -j MASQUERADE
     $ipp -s "$L2TP_NET" -o "$NET_IFACE" -j MASQUERADE
     echo "# Modified by hwdsl2 VPN script" > "$IPT_FILE"
     iptables-save >> "$IPT_FILE"
