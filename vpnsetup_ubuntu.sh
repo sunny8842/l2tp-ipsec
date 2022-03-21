@@ -656,28 +656,6 @@ EOF
   fi
 }
 
-set_up_ikev2() {
-  status=0
-  if [ -s /opt/src/ikev2.sh ] && [ ! -f /etc/ipsec.d/ikev2.conf ]; then
-    sleep 1
-    VPN_DNS_NAME="$VPN_DNS_NAME" VPN_PUBLIC_IP="$public_ip" \
-    VPN_CLIENT_NAME="$VPN_CLIENT_NAME" VPN_XAUTH_POOL="$VPN_XAUTH_POOL" \
-    VPN_DNS_SRV1="$VPN_DNS_SRV1" VPN_DNS_SRV2="$VPN_DNS_SRV2" \
-    VPN_PROTECT_CONFIG="$VPN_PROTECT_CONFIG" \
-    /bin/bash /opt/src/ikev2.sh --auto || status=1
-  elif [ -s /opt/src/ikev2.sh ]; then
-cat <<'EOF'
-================================================
-
-IKEv2 is already set up on this server.
-To manage IKEv2 clients, run: sudo ikev2.sh
-
-================================================
-
-EOF
-  fi
-}
-
 vpnsetup() {
   check_root
   check_vz
@@ -705,7 +683,6 @@ vpnsetup() {
   enable_on_boot
   start_services
   show_vpn_info
-  set_up_ikev2
 }
 
 ## Defer setup until we have the complete script
